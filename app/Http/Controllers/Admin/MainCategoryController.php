@@ -17,10 +17,12 @@ class MainCategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'main_category_name' => 'required|string|max:255',
+            'main_category_name' => 'required|string|max:255|unique:main_categories,main_category_name',
             'icon' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|string|in:active,inactive',
+        ],[
+            'main_category_name.unique' => 'The main category name has already been taken.',
         ]);
 
         // Handle the icon upload
@@ -30,7 +32,7 @@ class MainCategoryController extends Controller
             $icon = $request->file('icon');
             if ($icon->isValid()) {
                 $iconName = time() . '.' . $icon->getClientOriginalExtension();
-                $iconPath = $icon->storeAs('images', $iconName, 'public');
+                $iconPath = $icon->storeAs('icons', $iconName, 'public');
             } else {
                 return redirect()->back()->withErrors(['icon' => 'Invalid file upload for icon.']);
             }
@@ -64,7 +66,6 @@ class MainCategoryController extends Controller
         return redirect()->back()->with('success', 'Main Category added successfully!');
     }
 
-
     public function edit($id) {
         $mainCategory = MainCategory::findOrFail($id);
 
@@ -78,6 +79,15 @@ class MainCategoryController extends Controller
 
         // Find the category
         $mainCategory = MainCategory::findOrFail($id);
+        // Validate the incoming request data
+        $request->validate([
+            'main_category_name' => 'nullable|string|max:255|unique:main_categories,main_category_name,' . $id,
+            'icon' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'nullable|string|in:active,inactive',
+        ],  [
+            'main_category_name.unique' => 'The main category name has already been taken.',
+        ]);
 
         $iconPath = $mainCategory->icon;
         if ($request->hasFile('icon')) {
@@ -89,7 +99,7 @@ class MainCategoryController extends Controller
             }
             $icon = $request->file('icon');
             $iconName = time() . '.' . $icon->getClientOriginalExtension();
-            $iconPath = $icon->storeAs('images', $iconName, 'public');
+            $iconPath = $icon->storeAs('icons', $iconName, 'public');
         }
 
         $imagePath = $mainCategory->image;
@@ -102,15 +112,15 @@ class MainCategoryController extends Controller
             }
             $image = $request->file('image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $imagePath = $image->storeAs('images', $imageName, 'public');
+            $imagePath = $image->storeAs('image', $imageName, 'public');
         }
 
 
         $mainCategory->update([
-            'main_category_name' => $request->input('main_category_name'),
+            'main_category_name' => $request->input('main_category_name') ?: $mainCategory->main_category_name,
             'icon' => $iconPath,
             'image' => $imagePath,
-            'status' => $request->input('status'),
+            'status' => $request->input('status') ?: $mainCategory->status,
         ]);
 
         // Redirect or return a response

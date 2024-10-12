@@ -3,37 +3,44 @@
     Brand edit
 @endsection
 @section('content')
-    <nav class="page-breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Brand</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Edit</li>
-        </ol>
-    </nav>
+
+    <!-- PAGE-HEADER -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Brand Edit</h1>
+        </div>
+        <div class="ms-auto pageheader-btn">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Brand</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Edit</li>
+            </ol>
+        </div>
+    </div>
+    <!-- PAGE-HEADER END -->
     @include('errors.message')
     <div class="row">
-        <div class="col-md-6 mx-auto  stretch-card">
+        <div class="col-md-8 mx-auto  stretch-card">
             <div class="card">
                 <div class="card-body">
 
                     <h6 class="card-title">Edit Form</h6>
-
                     <form method="POST" action="{{ route('brand.update', $brand->id) }}"
-                        enctype="multipart/form-data" class="forms-sample">
+                          enctype="multipart/form-data" class="forms-sample">
                         @csrf
                         @method('PUT')
                         <div class="mb-3">
                             <label for="exampleInputUsername1" class="form-label">Brand Name:</label>
-                            <input type="text" name="brand" value="{{ $brand->brand }}"
-                                class="form-control inputbgtextcolor" id="exampleInputUsername1" autocomplete="off"
-                                placeholder="Username">
+                            <input type="text" name="brand_name" value="{{ $brand->brand_name }}"
+                                   class="form-control inputbgtextcolor" id="exampleInputUsername1" autocomplete="off"
+                                   placeholder="Brand Name">
                         </div>
-                        <div class="form-group mt-2">
+                        <div class="form-group mt-2" style="margin-bottom: 100px">
                             <label for="categoryImageInput">Image:</label>
-                            <div class="flex justify-start">
+                            <div class="d-flex" style=" max-width: 100px; height: 50px;">
                                 <span id="uploadImage" class="cursor-pointer font-mono text-xl" role="button"
-                                    aria-label="Upload Image">
+                                      aria-label="Upload Image">
                                     <svg viewBox="0 0 1024 1024" class="w-20" version="1.1"
-                                        xmlns="http://www.w3.org/2000/svg" fill="#D74825">
+                                         xmlns="http://www.w3.org/2000/svg" fill="#D74825">
                                         <path
                                             d="M736.68 435.86a173.773 173.773 0 0 1 172.042 172.038c0.578 44.907-18.093 87.822-48.461 119.698-32.761 34.387-76.991 51.744-123.581 52.343-68.202 0.876-68.284 106.718 0 105.841 152.654-1.964 275.918-125.229 277.883-277.883 1.964-152.664-128.188-275.956-277.883-277.879-68.284-0.878-68.202 104.965 0 105.842z"
                                             fill="#312782"></path>
@@ -55,13 +62,13 @@
                                     </svg>
                                 </span>
                                 <img id="imagePreview" src="{{ asset('storage/' . $brand->image) }}"
-                                    alt="Image Preview"
-                                    style="display: {{ $brand->image ? 'block' : 'none' }}; margin-top: 10px; max-width: 350px; height: 100px;" />
+                                     alt="Image Preview"
+                                     style="display: {{ $brand->image ? 'block' : 'none' }}; margin-top: 10px; max-width: 350px; height: 100px;" />
                             </div>
                             <input hidden type="file"  name="image"
-                                class="form-control inputbgtextcolor" id="categoryImageInput"
-                                accept="image/png, image/jpeg, image/jpg, image/gif"
-                                onchange="onFileChange(event)">
+                                   class="form-control inputbgtextcolor" id="categoryImageInput"
+                                   accept="image/png, image/jpeg, image/jpg, image/gif"
+                                   onchange="onFileChange(event)">
 
                         </div>
 
@@ -118,5 +125,5 @@
             }
         }
     </script>
- 
+
 @endsection

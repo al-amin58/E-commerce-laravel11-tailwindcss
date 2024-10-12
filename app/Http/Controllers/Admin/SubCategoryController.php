@@ -19,11 +19,13 @@ class SubCategoryController extends Controller
     {
 
         $request->validate([
-            'Sub_category_name' => 'required|string|max:255',
+            'Sub_category_name' => 'required|string|max:255|unique:sub_categories,Sub_category_name',
             'main_category_id' => 'required',
             'icon' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|string|in:active,inactive',
+        ],[
+            'Sub_category_name.unique' => 'The Sub category name has already been taken.',
         ]);
 
         // Handle the icon upload
@@ -33,7 +35,7 @@ class SubCategoryController extends Controller
             $icon = $request->file('icon');
             if ($icon->isValid()) {
                 $iconName = time() . '.' . $icon->getClientOriginalExtension();
-                $iconPath = $icon->storeAs('images', $iconName, 'public');
+                $iconPath = $icon->storeAs('icons', $iconName, 'public');
             } else {
                 return redirect()->back()->withErrors(['icon' => 'Invalid file upload for icon.']);
             }
@@ -81,6 +83,16 @@ class SubCategoryController extends Controller
 
         // Find the category
         $subCategory = SubCategory::findOrFail($id);
+    // Validate the incoming request data
+            $request->validate([
+                'Sub_category_name' => 'nullable|string|max:255|unique:sub_categories,Sub_category_name,' . $id,
+                'main_category_id' => 'nullable',
+                'icon' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'status' => 'nullable|string|in:active,inactive',
+            ],  [
+                'Sub_category_name.unique' => 'The Sub category name has already been taken.',
+            ]);
 
         $iconPath = $subCategory->icon;
         if ($request->hasFile('icon')) {
@@ -92,7 +104,7 @@ class SubCategoryController extends Controller
             }
             $icon = $request->file('icon');
             $iconName = time() . '.' . $icon->getClientOriginalExtension();
-            $iconPath = $icon->storeAs('images', $iconName, 'public');
+            $iconPath = $icon->storeAs('icons', $iconName, 'public');
         }
 
         $imagePath = $subCategory->image;
@@ -110,11 +122,11 @@ class SubCategoryController extends Controller
 
 
         $subCategory->update([
-            'Sub_category_name' => $request->input('Sub_category_name'),
+            'Sub_category_name' => $request->input('Sub_category_name') ?: $subCategory->Sub_category_name,
             'main_category_id' => $request->input('main_category_id'),
             'icon' => $iconPath,
             'image' => $imagePath,
-            'status' => $request->input('status'),
+            'status' => $request->input('status') ?: $subCategory->status,
         ]);
 
         // Redirect or return a response

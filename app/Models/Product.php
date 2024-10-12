@@ -8,18 +8,46 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'product_title',
+        'price',
+        'discount_price',
+        'discount_percentage',
+        'quantity',
+        'sku',
+        'main_category',
+        'sub_category',
+        'brand_id',
+        'short_description',
+        'full_description',
+        'thumbnail_image',
+        'status',
+    ];
+    public function mainCategory()
+    {
+        return $this->belongsTo(MainCategory::class, 'main_category');
+    }
+    public function subcategory() // Changed to singular
+    {
+        return $this->belongsTo(SubCategory::class, 'sub_category');
+    }
 
-    public function mainCategories()
+    public function brand()
     {
-        return $this->belongsTo(MainCategory::class);
-    }
-    public function subcategories()
-    {
-        return $this->belongsTo(SubCategory::class);
+        return $this->belongsTo(Brand::class, 'brand_id');
     }
 
-    public function brands()
+    public function colors()
     {
-        return $this->belongsTo(Brand::class);
+        return $this->belongsToMany(Color::class, 'color_product');
     }
+    public function sizes()
+    {
+        return $this->belongsToMany(Size::class, 'size_product');
+    }
+    public function images()
+    {
+        return $this->hasMany(ProductImages::class);
+    }
+
 }

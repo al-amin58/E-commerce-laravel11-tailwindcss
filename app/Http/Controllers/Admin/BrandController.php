@@ -16,9 +16,11 @@ class BrandController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'brand' => 'required|string|max:255',
+            'brand_name' => 'required|string|max:255|unique:brands,brand_name',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|string|in:active,inactive',
+        ],[
+            'brand_name.unique' => 'The brand name has already been taken.',
         ]);
 
         // Handle the image upload
@@ -37,7 +39,7 @@ class BrandController extends Controller
 
         // Create the main category in the database
         Brand::create([
-            'brand' => $request->input('brand'),
+            'brand_name' => $request->input('brand_name'),
             'image' => $imagePath,
             'status' => $request->input('status'),
         ]);
@@ -55,7 +57,13 @@ class BrandController extends Controller
     public function update(Request $request, $id)
     {
         $bran = Brand::findOrFail($id);
-
+        $request->validate([
+            'brand_name' => 'nullable|string|max:255|unique:brands,brand_name,' . $id,
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'nullable|string|in:active,inactive',
+        ],[
+            'brand_name.unique' => 'The brand name has already been taken.',
+        ]);
         $imagePath = $bran->image;
         if ($request->hasFile('image')) {
             $request->validate([
@@ -70,9 +78,9 @@ class BrandController extends Controller
         }
 
         $bran->update([
-            'brand' => $request->input('brand'),
+            'brand_name' => $request->input('brand_name') ?: $bran->brand_name,
             'image' => $imagePath,
-            'status' => $request->input('status'),
+            'status' => $request->input('status') ?: $bran->status
         ]);
 
         return redirect()->route('admin.brand')->with('success', 'Brand updated successfully.');

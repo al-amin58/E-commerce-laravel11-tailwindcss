@@ -1,128 +1,139 @@
-<!DOCTYPE html>
-
-<html lang="en">
-
+<!doctype html>
+<html lang="en" dir="ltr">
 <head>
+
+    <!-- META DATA -->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <!-- TITLE -->
     <title>{{ config('app.name') }} - @yield('title')</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-    <!-- End fonts -->
+    <!-- FAVICON -->
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('admin-assets') }}/assets/images/brand/favicon.ico" />
 
-    <!-- core:css -->
-    <link rel="stylesheet" href="{{ asset('admin-assets') }}/assets/vendors/core/core.css">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <link rel="stylesheet"
-        href="{{ asset('admin-assets') }}/assets/vendors/datatables.net-bs5/dataTables.bootstrap5.css">
-    <!-- End plugin css for this page -->
-    <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="{{ asset('admin-assets') }}/assets/vendors/flatpickr/flatpickr.min.css">
-    <!-- End plugin css for this pae -->
+    <!-- BOOTSTRAP CSS -->
+    <link id="style" href="{{ asset('admin-assets') }}/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
-    <!-- inject:css -->
-    <link rel="stylesheet" href="{{ asset('admin-assets') }}/assets/fonts/feather-font/css/iconfont.css">
-    <link rel="stylesheet" href="{{ asset('admin-assets') }}/assets/vendors/flag-icon-css/css/flag-icon.min.css">
-    <!-- endinject -->
+    <!-- STYLE CSS -->
+    <link href="{{ asset('admin-assets') }}/assets/css/style.css" rel="stylesheet" />
+    <link href="{{ asset('admin-assets') }}/assets/css/skin-modes.css" rel="stylesheet" />
 
-    <!-- Layout styles -->
-    <link rel="stylesheet" href="{{ asset('admin-assets') }}/assets/css/demo2/style.css">
-    <!-- End layout styles -->
+    <!--- FONT-ICONS CSS -->
+    <link href="{{ asset('admin-assets') }}/assets/plugins/icons/icons.css" rel="stylesheet" />
 
-    <link rel="shortcut icon" href="{{ asset('admin-assets') }}/assets/images/favicon.png" />
+    <!-- INTERNAL Switcher css -->
+    <link href="{{ asset('admin-assets') }}/assets/switcher/css/switcher.css" rel="stylesheet">
+    <link href="{{ asset('admin-assets') }}/assets/switcher/demo.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="{{ asset('admin-assets') }}/assets/vendors/dropify/dist/dropify.min.css">
-    <!-- Layout styles -->
-    <link rel="stylesheet" href="{{ asset('admin-assets') }}/assets/css/demo2/style.css">
-    <!-- End layout styles -->
-
-    <!-- TinyMCE CDN -->
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-
-
-
-    @vite('resources/css/app.css')
-    <style>
-        .inputbgtextcolor {
-            background: #0c1427;
-            color: white;
-        }
-
-        .tox .tox-mbtn {
-            background: #0c1427 !important;
-            color: white !important;
-        }
-
-        .tox .tox-tbtn {
-            background: #0c1427 !important;
-            color: white !important;
-        }
-        .tox .tox-tbtn svg{
-            fill: #ffffff !important;
-        }
-    </style>
     @yield('css')
 </head>
 
-<body>
-    <div class="main-wrapper ">
+<body class="ltr app sidebar-mini">
 
-        <!-- partial:partials/_sidebar.html -->
-        @include('admin.layouts.saidbar')
-        <!-- partial -->
+<!-- Switcher-->
+<!-- Switcher -->
+@include('admin.layouts.switcher')
+<!-- End Switcher -->
+<!-- Switcher-->
 
-        <div class="page-wrapper">
+<!-- GLOBAL-LOADER -->
+<div id="global-loader">
+    <img src="{{ asset('admin-assets') }}/assets/images/loader.svg" class="loader-img" alt="Loader">
+</div>
+<!-- /GLOBAL-LOADER -->
 
-            <!-- partial:partials/_navbar.html -->
-            @include('admin.layouts.navbar')
-            <!-- partial -->
-            <div class="page-content">
-                @yield('content')
+<!-- PAGE -->
+<div class="page">
+    <div class="page-main">
+
+        <!-- app-Header -->
+    @include('admin.layouts.navbar')
+    <!-- /app-Header -->
+
+        <!--APP-SIDEBAR-->
+    @include('admin.layouts.saidbar')
+    <!--/APP-SIDEBAR-->
+
+        <!--app-content open-->
+        <div class="app-content main-content mt-0">
+            <div class="side-app">
+
+                <!-- CONTAINER -->
+                <div class="main-container container-fluid">
+
+                    @yield('content')
+
+                </div>
             </div>
-            <!-- partial:partials/_footer.html -->
-            @include('admin.layouts.footer')
-            <!-- partial -->
-
         </div>
+        <!-- CONTAINER CLOSED -->
     </div>
 
-    <!-- core:js -->
-    <script src="{{ asset('admin-assets') }}/assets/vendors/core/core.js"></script>
-    <!-- endinject -->
-    @yield('script')
+    <!-- FOOTER -->
+@include('admin.layouts.footer')
+<!-- FOOTER CLOSED -->
 
-    <!-- Plugin js for this page -->
-    <script src="{{ asset('admin-assets') }}/assets/vendors/flatpickr/flatpickr.min.js"></script>
-    <script src="{{ asset('admin-assets') }}/assets/vendors/apexcharts/apexcharts.min.js"></script>
-    <!-- End plugin js for this page -->
+</div>
+<!-- page -->
 
-    <!-- inject:js -->
-    <script src="{{ asset('admin-assets') }}/assets/vendors/feather-icons/feather.min.js"></script>
-    <script src="{{ asset('admin-assets') }}/assets/js/template.js"></script>
-    <!-- endinject -->
+<!-- BACK-TO-TOP -->
+<a href="#top" id="back-to-top"><i class="fa fa-long-arrow-up"></i></a>
+@yield('script')
 
-    <!-- Custom js for this page -->
-    <script src="{{ asset('admin-assets') }}/assets/js/dashboard-dark.js"></script>
-    <!-- End custom js for this page -->
-    <!-- Custom js for this page -->
-    <script src="{{ asset('admin-assets') }}/assets/js/data-table.js"></script>
-    <!-- Plugin js for this page -->
-    <script src="{{ asset('admin-assets') }}/assets/vendors/datatables.net/jquery.dataTables.js"></script>
-    <script src="{{ asset('admin-assets') }}/assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js"></script>
-    <!-- End plugin js for this page -->
+<!-- JQUERY JS -->
+<script src="{{ asset('admin-assets') }}/assets/plugins/jquery/jquery.min.js"></script>
+
+<!-- BOOTSTRAP JS -->
+<script src="{{ asset('admin-assets') }}/assets/plugins/bootstrap/js/popper.min.js"></script>
+<script src="{{ asset('admin-assets') }}/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- SIDE-MENU JS -->
+<script src="{{ asset('admin-assets') }}/assets/plugins/sidemenu/sidemenu.js"></script>
+
+<!-- Perfect SCROLLBAR JS-->
+<script src="{{ asset('admin-assets') }}/assets/plugins/p-scroll/perfect-scrollbar.js"></script>
+<script src="{{ asset('admin-assets') }}/assets/plugins/p-scroll/pscroll.js"></script>
+
+<!-- STICKY JS -->
+<script src="{{ asset('admin-assets') }}/assets/js/sticky.js"></script>
 
 
-    <script src="{{ asset('admin-assets') }}/assets/vendors/dropify/dist/dropify.min.js"></script>
-    <script src="{{ asset('admin-assets') }}/assets/js/dropify.js"></script>
+<!-- APEXCHART JS -->
+<script src="{{ asset('admin-assets') }}/assets/js/apexcharts.js"></script>
+
+<!-- INTERNAL SELECT2 JS -->
+<script src="{{ asset('admin-assets') }}/assets/plugins/select2/select2.full.min.js"></script>
+
+<!-- CHART-CIRCLE JS-->
+<script src="{{ asset('admin-assets') }}/assets/plugins/circle-progress/circle-progress.min.js"></script>
+
+<!-- INTERNAL DATA-TABLES JS-->
+<script src="{{ asset('admin-assets') }}/assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
+<script src="{{ asset('admin-assets') }}/assets/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+<script src="{{ asset('admin-assets') }}/assets/plugins/datatable/dataTables.responsive.min.js"></script>
+
+<!-- INDEX JS -->
+<script src="{{ asset('admin-assets') }}/assets/js/index1.js"></script>
+<script src="{{ asset('admin-assets') }}/assets/js/index.js"></script>
+
+<!-- Reply JS-->
+<script src="{{ asset('admin-assets') }}/assets/js/reply.js"></script>
 
 
+<!-- COLOR THEME JS -->
+<script src="{{ asset('admin-assets') }}/assets/js/themeColors.js"></script>
+
+<!-- CUSTOM JS -->
+<script src="{{ asset('admin-assets') }}/assets/js/custom.js"></script>
+
+<!-- SWITCHER JS -->
+<script src="{{ asset('admin-assets') }}/assets/switcher/js/switcher.js"></script>
+
+<!-- TASKS LIST JS-->
+<script src="{{ asset('admin-assets') }}/assets/js/tasks-list.js"></script>
 
 
 </body>

@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\Controller;
+
+use App\Http\Controllers\ColorController;
+use App\Http\Controllers\SizeController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\FieldController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\Admin\BrandController;
-use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\AdminAuthController;
@@ -67,18 +67,40 @@ Route::prefix('admin')->group(function () {
         Route::put('/brand/update/{id}', [BrandController::class, 'update'])->name('brand.update');
         Route::delete('/brand/delete/{id}', [BrandController::class, 'destroy'])->name('brand.delete');
 
-        // Brand section
+        // Color section
+        Route::get('/color', [ColorController::class, 'index'])->name('admin.color');
+        Route::post('/color', [ColorController::class, 'store'])->name('color.store');
+        Route::get('/color/edit/{id}', [ColorController::class, 'edit'])->name('color.Edit');
+        Route::put('/color/update/{id}', [ColorController::class, 'update'])->name('color.update');
+        Route::delete('/color/delete/{id}', [ColorController::class, 'destroy'])->name('color.delete');
+
+        // Size section
+        Route::get('/size', [SizeController::class, 'index'])->name('admin.size');
+        Route::post('/size', [SizeController::class, 'store'])->name('size.store');
+        Route::get('/size/edit/{id}', [SizeController::class, 'edit'])->name('size.Edit');
+        Route::put('/size/update/{id}', [SizeController::class, 'update'])->name('size.update');
+        Route::delete('/size/delete/{id}', [SizeController::class, 'destroy'])->name('size.delete');
+
+        // products section
         Route::get('/products', [ProductController::class, 'index'])->name('admin.products');
-        Route::get('/products/add', [ProductController::class, 'add'])->name('product.add');
-         Route::post('product/store', [ProductController::class, 'store'])->name('product.store');
-        //  Route::get('/brand/edit/{id}', [BrandController::class, 'edit'])->name('brand.Edit');
-        //  Route::put('/brand/update/{id}', [BrandController::class, 'update'])->name('brand.update');
-        //  Route::delete('/brand/delete/{id}', [BrandController::class, 'destroy'])->name('brand.delete');
+        Route::get('/products/add', [ProductController::class, 'create'])->name('product.add');
+        Route::post('product/store', [ProductController::class, 'store'])->name('product.store');
+        Route::get('/product/edit/{id}', [ProductController::class, 'edit'])->name('product.Edit');
+        Route::put('/product/update/{id}', [ProductController::class, 'update'])->name('product.update');
+        Route::delete('/product/delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
+        // Products edit page set url http://your-domain/admin/delete-image/${imageId}
+        Route::delete('/delete-image/{id}', [ProductController::class, 'deleteImage']);
 
-       
 
-        // New field section
-        // Route::post('/fields', [FieldController::class, 'store'])->name('fields.store');
+
+
+
+
+
+        Route::get('/test', function () {
+            return view('admin.auth.demo');
+        })->name('test');
+
     });
 });
 

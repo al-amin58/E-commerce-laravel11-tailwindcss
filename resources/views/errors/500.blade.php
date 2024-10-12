@@ -1,73 +1,101 @@
-<!DOCTYPE html>
+<!doctype html>
+<html lang="en" dir="ltr"> <!-- This "custom-app.blade.php" master page is used only for "custom" page content present in "views/livewire" Ex: login, 404 -->
 
-<html lang="en">
+<!-- Mirrored from laravel8.spruko.com/noa/error500 by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 06 May 2023 13:13:12 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="description" content="Responsive HTML Admin Dashboard Template based on Bootstrap 5">
-	<meta name="author" content="NobleUI">
-	<meta name="keywords" content="nobleui, bootstrap, bootstrap 5, bootstrap5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
 
-	<title>NobleUI - HTML Bootstrap 5 Admin Dashboard Template</title>
+    <!-- META DATA -->
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Noa - Laravel Bootstrap 5 Admin & Dashboard Template">
+    <meta name="author" content="Spruko Technologies Private Limited">
+    <meta name="keywords" content="laravel admin template, bootstrap admin template, admin dashboard template, admin dashboard, admin template, admin, bootstrap 5, laravel admin, laravel admin dashboard template, laravel ui template, laravel admin panel, admin panel, laravel admin dashboard, laravel template, admin ui dashboard">
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-  <!-- End fonts -->
+    <!-- TITLE -->
+    <title>Noa - Laravel Bootstrap 5 Admin & Dashboard Template</title>
 
-	<!-- core:css -->
-	<link rel="stylesheet" href="{{ asset('admin-assets') }}/assets/vendors/core/core.css">
-	<!-- endinject -->
+    <!-- FAVICON -->
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('admin-assets') }}/assets/images/brand/favicon.ico" />
 
-	<!-- Plugin css for this page -->
-	<!-- End plugin css for this page -->
+    <!-- BOOTSTRAP CSS -->
+    <link id="style" href="{{ asset('admin-assets') }}/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
-	<!-- inject:css -->
-	<link rel="stylesheet" href="{{ asset('admin-assets') }}/assets/fonts/feather-font/css/iconfont.css">
-	<link rel="stylesheet" href="{{ asset('admin-assets') }}/assets/vendors/flag-icon-css/css/flag-icon.min.css">
-	<!-- endinject -->
+    <!-- STYLE CSS -->
+    <link href="{{ asset('admin-assets') }}/assets/css/style.css" rel="stylesheet" />
+    <link href="{{ asset('admin-assets') }}/assets/css/skin-modes.css" rel="stylesheet" />
 
-  <!-- Layout styles -->
-	<link rel="stylesheet" href="{{ asset('admin-assets') }}/assets/css/demo2/style.css">
-  <!-- End layout styles -->
 
-  <link rel="shortcut icon" href="{{ asset('admin-assets') }}/assets/images/favicon.png" />
+
+    <!--- FONT-ICONS CSS -->
+    <link href="{{ asset('admin-assets') }}/assets/plugins/icons/icons.css" rel="stylesheet" />
+
+    <!-- INTERNAL Switcher css -->
+    <link href="{{ asset('admin-assets') }}/assets/switcher/css/switcher.css" rel="stylesheet">
+    <link href="{{ asset('admin-assets') }}/assets/switcher/demo.css" rel="stylesheet">
+
 </head>
-<body>
-	<div class="main-wrapper">
-		<div class="page-wrapper full-page">
-			<div class="page-content d-flex align-items-center justify-content-center">
 
-				<div class="row w-100 mx-0 auth-page">
-					<div class="col-md-8 col-xl-6 mx-auto d-flex flex-column align-items-center">
-						<img src="{{ asset('admin-assets') }}/assets/images/others/404.svg" class="img-fluid mb-2" alt="404">
-						<h1 class="fw-bolder mb-22 mt-2 tx-80 text-muted">500</h1>
-						<h4 class="mb-2">Internal server error</h4>
-						<h6 class="text-muted mb-3 text-center">Oopps!! There wan an error. Please try agin later.</h6>
-						<a href="{{ url('/') }}">Back to home</a>
-					</div>
-				</div>
 
-			</div>
-		</div>
-	</div>
+<body class="ltr error-bg">
 
-	<!-- core:js -->
-	<script src="{{ asset('admin-assets') }}/assets/vendors/core/core.js"></script>
-	<!-- endinject -->
 
-	<!-- Plugin js for this page -->
-	<!-- End plugin js for this page -->
 
-	<!-- inject:js -->
-	<script src="{{ asset('admin-assets') }}/assets/vendors/feather-icons/feather.min.js"></script>
-	<script src="{{ asset('admin-assets') }}/assets/js/template.js"></script>
-	<!-- endinject -->
+<!-- GLOBAL-LOADER -->
+<div id="global-loader">
+    <img src="{{ asset('admin-assets') }}/assets/images/loader.svg" class="loader-img" alt="Loader">
+</div>
 
-	<!-- Custom js for this page -->
-	<!-- End custom js for this page -->
+
+
+<!-- PAGE -->
+<div class="page">
+    <!-- PAGE-CONTENT OPEN -->
+    <div class="page-content error-page error2">
+        <div class="container text-center">
+            <div class="error-template">
+                <h2 class="text-white mb-2">500<span class="fs-20">error</span></h2>
+                <h5 class="error-details text-white">
+                    Oops! Some error has occured, Requested page not found!
+                </h5>
+                <div class="text-center">
+                    <a class="btn btn-primary mt-5 mb-5" href="{{ url('/') }}"> <i class="fa fa-long-arrow-left"></i> Back to Home </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- PAGE-CONTENT OPEN CLOSED -->
+</div>
+<!-- End PAGE -->
+
+
+<!-- JQUERY JS -->
+<script src="{{ asset('admin-assets') }}/assets/plugins/jquery/jquery.min.js"></script>
+
+<!-- BOOTSTRAP JS -->
+<script src="{{ asset('admin-assets') }}/assets/plugins/bootstrap/js/popper.min.js"></script>
+<script src="{{ asset('admin-assets') }}/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Perfect SCROLLBAR JS-->
+<script src="{{ asset('admin-assets') }}/assets/plugins/p-scroll/perfect-scrollbar.js"></script>
+
+<!-- STICKY JS -->
+<script src="{{ asset('admin-assets') }}/assets/js/sticky.js"></script>
+
+
+
+<!-- COLOR THEME JS -->
+<script src="{{ asset('admin-assets') }}/assets/js/themeColors.js"></script>
+
+<!-- CUSTOM JS -->
+<script src="{{ asset('admin-assets') }}/assets/js/custom.js"></script>
+
+<!-- SWITCHER JS -->
+<script src="{{ asset('admin-assets') }}/assets/switcher/js/switcher.js"></script>
 
 </body>
+
+
+<!-- Mirrored from laravel8.spruko.com/noa/error500 by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 06 May 2023 13:13:12 GMT -->
 </html>

@@ -1,91 +1,116 @@
-<!DOCTYPE html>
-
-<html lang="en">
+<!doctype html>
+<html lang="en" >
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-	<title>{{ config('app.name') }} - Admin Login</title>
+    <!-- META DATA -->
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- TITLE -->
+    <title>{{ config('app.name') }} - Admin Login</title>
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-  <!-- End fonts -->
+    <!-- FAVICON -->
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('admin-assets') }}/assets/images/brand/favicon.ico" />
 
-	<!-- core:css -->
-	<link rel="stylesheet" href="{{ asset('admin-assets') }}/assets/vendors/core/core.css">
-	<!-- endinject -->
+    <!-- BOOTSTRAP CSS -->
+    <link id="style" href="{{ asset('admin-assets') }}/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
-	<!-- Plugin css for this page -->
-	<!-- End plugin css for this page -->
+    <!-- STYLE CSS -->
+    <link href="{{ asset('admin-assets') }}/assets/css/style.css" rel="stylesheet" />
+    <link href="{{ asset('admin-assets') }}/assets/css/skin-modes.css" rel="stylesheet" />
 
-	<!-- inject:css -->
-	<link rel="stylesheet" href="{{ asset('admin-assets') }}/assets/fonts/feather-font/css/iconfont.css">
-	<link rel="stylesheet" href="{{ asset('admin-assets') }}/assets/vendors/flag-icon-css/css/flag-icon.min.css">
-	<!-- endinject -->
 
-  <!-- Layout styles -->
-	<link rel="stylesheet" href="{{ asset('admin-assets') }}/assets/css/demo2/style.css">
-  <!-- End layout styles -->
+
+    <!--- FONT-ICONS CSS -->
+    <link href="{{ asset('admin-assets') }}/assets/plugins/icons/icons.css" rel="stylesheet" />
+
+    <!-- INTERNAL Switcher css -->
+    <link href="{{ asset('admin-assets') }}/assets/switcher/css/switcher.css" rel="stylesheet">
+    <link href="{{ asset('admin-assets') }}/assets/switcher/demo.css" rel="stylesheet">
 
 </head>
-<body>
-	<div class="main-wrapper">
-		<div class="page-wrapper full-page">
-			<div class="page-content d-flex align-items-center justify-content-center">
-
-				<div class="row w-100 mx-0 auth-page">
-					<div class="col-md-8 col-xl-6 mx-auto">
-						<div class="card">
-							<div class="row">
-                                <div class="col-md-4 pe-md-0">
-                                    <div class="auth-side-wrapper">
-                                        <img src="{{ asset('admin-assets') }}/assets/images/admin_login.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="col-md-8 ps-md-0">
-                                    <div class="auth-form-wrapper px-4 py-5">
-                                        <p  class="noble-ui-logo logo-light d-block mb-2">Admin </span></a>
-                                        <h5 class="text-muted fw-normal mb-4">Welcome Admin Login to your account.</h5>
-
-                                        {{-- Error show section --}}
-                                        @if ($errors->any())
-                                            <div class="mb-4">
-                                                <ul>
-                                                    @foreach ($errors->all() as $error)
-                                                        <li class="text-red-500" style="color: red">{{ $error }}</li>
-                                                    @endforeach
-                                                </ul>
-                                            </div>
-                                        @endif
-
-                                        {{-- Lgoin section  --}}
-                                        <form action="{{ route('admin.login') }}" method="POST" class="forms-sample">
-                                            @csrf
-                                            <div class="mb-3">
-                                                <label for="email" class="form-label">Email address</label>
-                                                <input type="email" name="email"  class="form-control" id="email" required placeholder="Email">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="password" class="form-label">Password</label>
-                                                <input type="password" class="form-control" id="password" name="password" required placeholder="Password">
-                                            </div>
 
 
-                                            <button type="submit" class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0"> Login Admin</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-						</div>
-					</div>
-				</div>
+<body class="ltr login-img">
 
-			</div>
-		</div>
-	</div>
+
+
+
+<!-- GLOBAL-LOADER -->
+<div id="global-loader">
+    <img src="{{ asset('admin-assets') }}/assets/images/loader.svg" class="loader-img" alt="Loader">
+</div>
+
+
+
+<!-- PAGE -->
+<div class="page">
+    <div>
+
+        <div class="container-login100 ">
+
+            <div class="wrap-login100 p-0 col-4 mx-auto">
+                <div class="card-body ">
+                    @include('errors.message')
+                    <span class="login100-form-title"> Admin Login</span>
+                    <form action="{{ route('admin.login') }}" method="POST" class="login100-form mx-auto validate-form" >
+                        @csrf
+
+                        <div class="wrap-input100 validate-input" data-bs-validate = "Valid email is required: ex@abc.xyz">
+                            <input class="input100" type="text" name="email" required placeholder="Email">
+                            <span class="focus-input100"></span>
+                            <span class="symbol-input100">
+											<i class="zmdi zmdi-email" aria-hidden="true"></i>
+										</span>
+                        </div>
+                        <div class="wrap-input100 validate-input" data-bs-validate = "Password is required">
+                            <input class="input100" type="password" name="password" required placeholder="Password">
+                            <span class="focus-input100"></span>
+                            <span class="symbol-input100">
+											<i class="zmdi zmdi-lock" aria-hidden="true"></i>
+										</span>
+                        </div>
+
+                            <button type="submit" class="login100-form-btn mt-5 btn-primary">
+                                Login Admin
+                            </button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- CONTAINER CLOSED -->
+    </div>
+</div>
+<!-- End PAGE -->
+
+
+<!-- JQUERY JS -->
+<script src="{{ asset('admin-assets') }}/assets/plugins/jquery/jquery.min.js"></script>
+
+<!-- BOOTSTRAP JS -->
+<script src="{{ asset('admin-assets') }}/assets/plugins/bootstrap/js/popper.min.js"></script>
+<script src="{{ asset('admin-assets') }}/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Perfect SCROLLBAR JS-->
+<script src="{{ asset('admin-assets') }}/assets/plugins/p-scroll/perfect-scrollbar.js"></script>
+
+<!-- STICKY JS -->
+<script src="{{ asset('admin-assets') }}/assets/js/sticky.js"></script>
+
+
+
+<!-- COLOR THEME JS -->
+<script src="{{ asset('admin-assets') }}/assets/js/themeColors.js"></script>
+
+<!-- CUSTOM JS -->
+<script src="{{ asset('admin-assets') }}/assets/js/custom.js"></script>
+
+<!-- SWITCHER JS -->
+<script src="{{ asset('admin-assets') }}/assets/switcher/js/switcher.js"></script>
 
 </body>
+
+
+<!-- Mirrored from laravel8.spruko.com/noa/login by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 06 May 2023 13:11:49 GMT -->
 </html>

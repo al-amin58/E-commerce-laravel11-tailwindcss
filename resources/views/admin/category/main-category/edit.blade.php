@@ -3,20 +3,27 @@
     Main Category edit
 @endsection
 @section('content')
-    <nav class="page-breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Main Category</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Edit</li>
-        </ol>
-    </nav>
+
+    <!-- PAGE-HEADER -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Main Category Edit</h1>
+        </div>
+        <div class="ms-auto pageheader-btn">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Main Category</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Edit</li>
+            </ol>
+        </div>
+    </div>
+    <!-- PAGE-HEADER END -->
     @include('errors.message')
     <div class="row">
-        <div class="col-md-6 mx-auto  stretch-card">
+        <div class="col-md-8 mx-auto  stretch-card">
             <div class="card">
                 <div class="card-body">
 
                     <h6 class="card-title">Edit Form</h6>
-
                     <form method="POST" action="{{ route('maincategory.update', $mainCategory->id) }}"
                         enctype="multipart/form-data" class="forms-sample">
                         @csrf
@@ -29,9 +36,10 @@
                         </div>
 
 
-                        <div class="form-group mt-2">
+                        <div class="form-group mt-2" style="margin-bottom: 100px">
                             <label for="categoryIcon">Icon:</label>
-                            <div class="flex justify-start">
+                            <div class="d-flex " style=" max-width: 100px; height: 50px;">
+                                <div>
                                 <span id="uploadIcon" class="cursor-pointer font-mono text-xl" role="button"
                                     aria-label="Upload Icon">
                                     <svg viewBox="0 0 1024 1024" class="w-20" version="1.1"
@@ -56,9 +64,13 @@
                                             fill="#D74825"></path>
                                     </svg>
                                 </span>
-                                <img id="iconPreview" src="{{ asset('storage/' . $mainCategory->icon) }}"
-                                    alt="Icon Preview"
-                                    style="display: {{ $mainCategory->icon ? 'block' : 'none' }}; margin-top: 10px; max-width: 350px; height: 100px;" />
+                            </div>
+                                <div>
+                                    <img id="iconPreview" src="{{ asset('storage/' . $mainCategory->icon) }}"
+                                         alt="Icon Preview"
+                                         style="display: {{ $mainCategory->icon ? 'block' : 'none' }}; margin-top: 10px; max-width: 350px; height: 100px; " />
+                                </div>
+
                             </div>
                             <input hidden type="file" name="icon"
                                 class="form-control inputbgtextcolor" id="categoryIcon"
@@ -67,9 +79,9 @@
 
                         </div>
 
-                        <div class="form-group mt-2">
+                        <div class="form-group mt-2" style="margin-bottom: 100px">
                             <label for="categoryImageInput">Image:</label>
-                            <div class="flex justify-start">
+                            <div class="d-flex" style=" max-width: 100px; height: 50px;">
                                 <span id="uploadImage" class="cursor-pointer font-mono text-xl" role="button"
                                     aria-label="Upload Image">
                                     <svg viewBox="0 0 1024 1024" class="w-20" version="1.1"
