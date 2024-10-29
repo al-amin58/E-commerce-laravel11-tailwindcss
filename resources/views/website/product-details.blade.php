@@ -8,21 +8,19 @@
             <div class="row align-items-center">
                 <div class="col-lg-6 col-md-6 col-12">
                     <div class="breadcrumbs-content">
-                        <h1 class="page-title">Single Product</h1>
+                        <h1 class="page-title">{{ \Illuminate\Support\Str::words($product->product_title, 5,  '...') }}</h1>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-12">
                     <ul class="breadcrumb-nav">
                         <li><a href="{{ url('/') }}"><i class="lni lni-home"></i> Home</a></li>
                         <li><a href="{{ url('/shop') }}">Shop</a></li>
-                        <li>Single Product</li>
+                        <li>{{ \Illuminate\Support\Str::words($product->product_title, 3,  '...') }}</li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
-
-
     <section class="item-details section">
         <div class="container">
             <div class="top-area">
@@ -31,68 +29,88 @@
                         <div class="product-images">
                             <main id="gallery">
                                 <div class="main-img">
-                                    <img src="{{ asset('website-assets') }}/assets/images/product-details/01.jpg" id="current" alt="#">
+                                    <img src="{{ asset('images/products/' . $product->thumbnail_image) }}" id="current" alt="#" style=" height: 300px;">
                                 </div>
                                 <div class="images">
-                                    <img src="{{ asset('website-assets') }}/assets/images/product-details/01.jpg" class="img" alt="#">
-                                    <img src="{{ asset('website-assets') }}/assets/images/product-details/02.jpg" class="img" alt="#">
-                                    <img src="{{ asset('website-assets') }}/assets/images/product-details/03.jpg" class="img" alt="#">
-                                    <img src="{{ asset('website-assets') }}/assets/images/product-details/04.jpg" class="img" alt="#">
-                                    <img src="{{ asset('website-assets') }}/assets/images/product-details/05.jpg" class="img" alt="#">
+                                        @if ($product->images->isEmpty())
+                                            <p>No images available for this product.</p>
+                                            <img src="path/to/default/image.jpg" alt="Default Image">
+                                        @else
+                                            @foreach ($product->images as $image)
+                                            <img src="{{ asset( $image->image_id) }}" class="img" alt="image" style="width: 300px; height: 65px" >
+                                            @endforeach
+                                        @endif
                                 </div>
                             </main>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-12 col-12">
                         <div class="product-info">
-                            <h2 class="title">GoPro Karma Camera Drone</h2>
-                            <p class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">Action
-                                    cameras</a></p>
-                            <h3 class="price">$850<span>$945</span></h3>
-                            <p class="info-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                tempor incididunt
-                                ut labore et dolore magna aliqua.</p>
+                            <h2 class="title">{{$product->product_title}}</h2>
+                            <p class="category"><i class="lni lni-tag"></i> Brand:<a href="javascript:void(0)">{{ $product->brand?->brand_name ?? 'N/A' }}</a></p>
+                            <p class="category"><i class="lni lni-tag"></i> Category:<a href="javascript:void(0)">{{ $product->subcategory->Sub_category_name ?? $product->mainCategory->main_category_name ?? 'N/A' }}</a></p>
+                            <h3 class="price" id="price-display">
+                                ${{ $product->discount_price ?? $product->price }}
+                                @if($product->price !== $product->discount_price)
+                                    <span class="original-price" name="price">${{ $product->price }}</span>
+                                @endif
+                            </h3>
+                            <p class="info-text">{{$product->short_description}}</p>
+
                             <div class="row">
-                                <div class="col-lg-4 col-md-4 col-12">
-                                    <div class="form-group color-option">
-                                        <label class="title-label" for="size">Choose color</label>
-                                        <div class="single-checkbox checkbox-style-1">
-                                            <input type="checkbox" id="checkbox-1" checked>
-                                            <label for="checkbox-1"><span></span></label>
-                                        </div>
-                                        <div class="single-checkbox checkbox-style-2">
-                                            <input type="checkbox" id="checkbox-2">
-                                            <label for="checkbox-2"><span></span></label>
-                                        </div>
-                                        <div class="single-checkbox checkbox-style-3">
-                                            <input type="checkbox" id="checkbox-3">
-                                            <label for="checkbox-3"><span></span></label>
-                                        </div>
-                                        <div class="single-checkbox checkbox-style-4">
-                                            <input type="checkbox" id="checkbox-4">
-                                            <label for="checkbox-4"><span></span></label>
+                                @if(!$product->sizes->isEmpty())
+                                    <div class="col-lg-4 col-md-4 col-12">
+                                        <div class="form-group color-option">
+                                            <label class="title-label">Choose Size</label>
+                                            @foreach ($product->sizes as $size)
+                                                <div class="single-checkbox">
+                                                    <input type="radio" name="size" id="checkbo-{{ $loop->index + 1 }}" value="{{ $size->id }}" {{ $size->pivot->product_id === $product->id ? '' : 'checked' }} style="display: none">
+                                                    <label for="checkbo-{{ $loop->index + 1 }}" class="size-label" data-default="{{ $size->size }}" style="color: black !important;  background-color: {{ $size->pivot->product_id === $product->id ? 'transparent' : '#0c4128' }};">
+                                                        {{ $size->size }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-12">
-                                    <div class="form-group">
-                                        <label for="color">Battery capacity</label>
-                                        <select class="form-control" id="color">
-                                            <option>5100 mAh</option>
-                                            <option>6200 mAh</option>
-                                            <option>8000 mAh</option>
-                                        </select>
+                                @endif
+
+                                @if(!$product->colors->isEmpty())
+                                    <div class="col-lg-4 col-md-4 col-12">
+                                        <div class="form-group color-option">
+                                            <label class="title-label">Choose color</label>
+                                            @foreach ($product->colors as $color)
+                                                <div class="single-checkbox checkbox-style">
+                                                    <input type="checkbox" name="color" id="checkbox-{{ $loop->index + 1 }}" value="{{ $color->id }}" {{ $color->pivot->product_id === $product->id ? '' : 'checked' }}>
+                                                    <label for="checkbox-{{ $loop->index + 1 }}"><span style="background-color: {{ $color->color_code }};"></span></label> <!-- Assuming `hex_code` is a property that holds the color value -->
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-12">
+                                @endif
+                                @if($product->product_attributes && $product->product_attributes->isNotEmpty())
+                                    <div class="col-lg-5 col-md-5 col-12">
+                                        <div class="form-group">
+                                            <label>Attribute</label>
+                                            <select name="attribute" class="form-control" id="attribute">
+                                                <option value="">Select Attribute</option>
+                                                @foreach ($product->product_attributes as $attribute)
+                                                    <option value="{{ $attribute->id }}" data-price="{{ $attribute->value }}">
+                                                        {{ $attribute->key }} - {{ $attribute->value }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                @endif
+                                <div class="col-lg-3 col-md-3 col-12">
                                     <div class="form-group quantity">
-                                        <label for="color">Quantity</label>
-                                        <select class="form-control">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
+                                        <label>Quantity</label>
+                                        <select name="quantity" class="form-control">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
                                         </select>
                                     </div>
                                 </div>
@@ -101,19 +119,10 @@
                                 <div class="row align-items-end">
                                     <div class="col-lg-4 col-md-4 col-12">
                                         <div class="button cart-button">
-                                            <button class="btn" style="width: 100%;">Add to Cart</button>
+                                            <button class="btn" style="width: 100%;" id="add-to-cart" data-product-id="{{ $product->id }}" onclick="addToCart(this)">Add to Cart</button>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-12">
-                                        <div class="wish-button">
-                                            <button class="btn"><i class="lni lni-reload"></i> Compare</button>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-12">
-                                        <div class="wish-button">
-                                            <button class="btn"><i class="lni lni-heart"></i> To Wishlist</button>
-                                        </div>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -125,38 +134,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-12">
                             <div class="info-body custom-responsive-margin">
-                                <h4>Details</h4>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.</p>
-                                <h4>Features</h4>
-                                <ul class="features">
-                                    <li>Capture 4K30 Video and 12MP Photos</li>
-                                    <li>Game-Style Controller with Touchscreen</li>
-                                    <li>View Live Camera Feed</li>
-                                    <li>Full Control of HERO6 Black</li>
-                                    <li>Use App for Dedicated Camera Operation</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-12">
-                            <div class="info-body">
-                                <h4>Specifications</h4>
-                                <ul class="normal-list">
-                                    <li><span>Weight:</span> 35.5oz (1006g)</li>
-                                    <li><span>Maximum Speed:</span> 35 mph (15 m/s)</li>
-                                    <li><span>Maximum Distance:</span> Up to 9,840ft (3,000m)</li>
-                                    <li><span>Operating Frequency:</span> 2.4GHz</li>
-                                    <li><span>Manufacturer:</span> GoPro, USA</li>
-                                </ul>
-                                <h4>Shipping Options:</h4>
-                                <ul class="normal-list">
-                                    <li><span>Courier:</span> 2 - 4 days, $22.50</li>
-                                    <li><span>Local Shipping:</span> up to one week, $10.00</li>
-                                    <li><span>UPS Ground Shipping:</span> 4 - 6 days, $18.00</li>
-                                    <li><span>Unishop Global Export:</span> 3 - 4 days, $25.00</li>
-                                </ul>
+                                {{$product->full_description}}
                             </div>
                         </div>
                     </div>
@@ -342,3 +320,119 @@
         </div>
     </div>
 @endsection
+@section('script')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.getElementById('attribute').addEventListener('change', function() {
+            var selectedOption = this.options[this.selectedIndex];
+            var attributePrice = selectedOption.getAttribute('data-price');
+
+            if (attributePrice) {
+                document.getElementById('price-display').innerHTML = `${attributePrice}`;
+            } else {
+                // Reset to the default price if no attribute is selected
+                document.getElementById('price-display').innerHTML = `\
+                ${{ $product->discount_price ?? $product->price }} \
+                @if($product->price !== $product->discount_price) \
+                    <span class="original-price">${{ $product->price }}</span> \
+                @endif`;
+            }
+        });
+    </script>
+    <script>
+        // Wait for the DOM to fully load
+        document.addEventListener("DOMContentLoaded", function() {
+            // Select all thumbnail images
+            const thumbnails = document.querySelectorAll('.images .img');
+            // Select the main image element
+            const mainImage = document.getElementById('current');
+
+            // Add click event listener to each thumbnail
+            thumbnails.forEach(thumbnail => {
+                thumbnail.addEventListener('click', function() {
+                    // Get the source of the clicked thumbnail
+                    const newSrc = this.src;
+
+                    // Update the main image source to the clicked thumbnail's source
+                    mainImage.src = newSrc;
+                });
+            });
+        });
+    </script>
+
+{{--    Add to cart--}}
+    <script>
+        $(document).ready(function() {
+            $('#add-to-cart').click(function() {
+                var productId = $(this).data('product-id');
+                var quantity = $('select[name="quantity"]').val(); // Get the selected quantity
+                var price = parseFloat('{{$product->discount_price ?? $product->price}}'); // Get the product price
+                var totalPrice = price * quantity; // Calculate total price
+                var selectedSize = $('input[name="size"]:checked').val(); // Get the selected size
+                var selectedColors = $('input[name="color"]:checked').map(function () {
+                    return $(this).val();
+                }).get(); // Get the selected colors as an array
+                var selectedAttribute = $('#attribute').val(); // Get the selected attribute
+
+                $.ajax({
+                    url: 'http://localhost/E-commerce-laravel11-tailwindcss/cart/add',
+                    method: 'POST',
+                    data: {
+                        product_id: productId,
+                        quantity: quantity,
+                        total_price: totalPrice,
+                        size: selectedSize,
+                        colors: selectedColors,
+                        attribute: selectedAttribute,
+                        thumbnail_image: $('#current').attr('src'),
+                        product_title: '{{$product->product_title}}',
+                        price: price,
+                        _token: '{{ csrf_token() }}'
+                    },
+                });
+            });
+        });
+
+
+    </script>
+{{--    after add to cart button is desable--}}
+    <script>
+        function addToCart(button) {
+            // Logic to add the product to the cart
+            const productId = button.getAttribute('data-product-id');
+
+            // Simulate adding to cart (you can replace this with actual logic)
+            console.log('Product added to cart:', productId);
+
+            // Disable the button after adding the product
+            button.innerText = 'Added to Cart';
+            button.disabled = true;
+            button.style.cursor = 'not-allowed'; // Optional: Change cursor style
+        }
+    </script>
+{{--    size selectd and background color is change--}}
+    <script>
+        $(document).ready(function() {
+            $('input[name="size"]').change(function() {
+                // Reset all labels to default background
+                $('.size-label').css({
+                    'background-color': 'transparent',
+                    'color': '#000000'
+                });
+
+                // Change the background color of the selected label
+                const label = $(`label[for="${this.id}"]`);
+                label.css({
+                    'background-color': '#0c4128',
+                    'color': '#FFFFFF',
+                    'border-radius': '50%',
+                    'width': '25px',
+                    'height': '25px',
+                    'padding': '0px 3px 0px 6px'
+                });
+            });
+        });
+
+    </script>
+@endsection
+

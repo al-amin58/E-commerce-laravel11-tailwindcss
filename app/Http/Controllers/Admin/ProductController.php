@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Brand;
 use App\Models\Color;
 use App\Models\Product;
+use App\Models\ProductAttribute;
 use App\Models\ProductImages;
 use App\Models\Size;
 use App\Models\SubCategory;
@@ -16,8 +17,6 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::with(['mainCategory', 'subcategory', 'brand'])->get();
-//        dd($products->brand);
-
         return view('admin.Products.index', compact('products'));
     }
 
@@ -50,10 +49,13 @@ class ProductController extends Controller
             'sizes' => 'nullable|array',
             'short_description' => 'required|string',
             'full_description' => 'required|string',
-            'thumbnail_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'thumbnail_image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'product_images' => 'required|array|max:6',
-            'product_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'product_images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'status' => 'required|in:active,inactive',
+            'attributes' => 'nullable|array',
+            'attributes.*.key' => 'required|string|max:255',
+            'attributes.*.value' => 'required|string|max:255',
         ]);
 
         // Calculate final price after discount
@@ -86,6 +88,16 @@ class ProductController extends Controller
             'status' => $request->input('status'),
         ]);
 
+        // After creating the product
+        if ($request->has('attributes')) {
+            foreach ($request->input('attributes') as $attribute) {
+                $product->attributes()->create([
+                    'key' => $attribute['key'],
+                    'value' => $attribute['value'],
+                ]);
+            }
+        }
+
         // Handle product images upload
         $images = $data['product_images'];
         $imageNames = [];
@@ -107,7 +119,7 @@ class ProductController extends Controller
     }
 
     public function edit($id){
-        $product = Product::with('images')->findOrFail($id);
+        $product = Product::with('images', 'attributes')->findOrFail($id);
         $mainCategories = MainCategory::where('status', 'active')->get();
         $subcategories = SubCategory::where('status', 'active')->get();
         $brands = Brand::where('status', 'active')->get();
@@ -136,10 +148,13 @@ class ProductController extends Controller
             'sizes.*' => 'exists:sizes,id',
             'short_description' => 'nullable|string',
             'full_description' => 'nullable|string',
-            'thumbnail_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'thumbnail_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'product_images' => 'nullable|array|max:6',
-            'product_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'product_images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'status' => 'nullable|in:active,inactive',
+            'attributes' => 'nullable|array',
+            'attributes.*.key' => 'nullable|string|max:255',
+            'attributes.*.value' => 'nullable|string|max:255',
         ]);
 
 
@@ -183,7 +198,31 @@ class ProductController extends Controller
             'full_description' => $request->input('full_description', $product->full_description),
             'thumbnail_image' => $thumbnailImageName,
             'status' => $request->input('status', $product->status),
+
         ]);
+
+        // After creating the product
+        // Handle attributes update or create
+        if ($request->has('attributes')) {
+            foreach ($request->input('attributes') as $attribute) {
+                if (isset($attribute['id'])) {
+                    // Update existing attribute
+                    $existingAttribute = $product->attributes()->find($attribute['id']);
+                    if ($existingAttribute) {
+                        $existingAttribute->update([
+                            'key' => $attribute['key'],
+                            'value' => $attribute['value'],
+                        ]);
+                    }
+                } else {
+                    // Create new attribute
+                    $product->attributes()->create([
+                        'key' => $attribute['key'],
+                        'value' => $attribute['value'],
+                    ]);
+                }
+            }
+        }
 
         // Handle product images upload
         if ($request->has('product_images')) {
@@ -236,7 +275,13 @@ class ProductController extends Controller
 
         return response()->json(['success' => true]);
     }
+    public function attributesDestroy($id)
+    {
+        $attribute = ProductAttribute::findOrFail($id);
+        $attribute->delete();
 
+        return response()->json(['message' => 'Attribute deleted successfully!']);
+    }
 
 
 

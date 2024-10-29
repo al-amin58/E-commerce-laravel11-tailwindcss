@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\SizeController;
 use Illuminate\Support\Facades\Route;
@@ -17,10 +18,19 @@ Route::get('/', [WebsiteController::class, 'index'])->name('home');
 Route::get('/about', [WebsiteController::class, 'about'])->name('about');
 Route::get('/contact', [WebsiteController::class, 'contact'])->name('contact');
 Route::get('/shop', [WebsiteController::class, 'shop'])->name('shop');
-Route::get('/product-details', [WebsiteController::class, 'productDetails'])->name('product.details');
+Route::get('/product-details/{id}', [WebsiteController::class, 'productDetails'])->name('product.details');
 Route::get('/cart', [WebsiteController::class, 'cart'])->name('cart');
+Route::get('/search/suggestions', [WebsiteController::class, 'searchSuggestions'])->name('search.suggestions');
+Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
+Route::delete('/cart/remove/{productId}', [CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::post('/cart/clear', [CartController::class, 'clearCart'])->name('cart.clear');
+Route::post('/cart/items/{id}/update', [CartController::class, 'updateQuantity'])->name('cart.items.update');
 
 
+Route::get('/damo', function () {
+    return view('admin.auth.demo');
+})->name('damo');
 
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
@@ -90,6 +100,8 @@ Route::prefix('admin')->group(function () {
         Route::delete('/product/delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
         // Products edit page set url http://your-domain/admin/delete-image/${imageId}
         Route::delete('/delete-image/{id}', [ProductController::class, 'deleteImage']);
+        Route::delete('/attributes/{id}', [ProductController::class, 'attributesDestroy']);
+
 
 
 

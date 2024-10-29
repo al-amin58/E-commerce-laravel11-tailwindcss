@@ -1,6 +1,6 @@
 <header class="header navbar-area">
 
-    <div class="topbar">
+    <div class="topbar" style="height: 50px !important;">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-4 col-md-4 col-12">
@@ -57,10 +57,11 @@
 
                 </div>
                 <div class="col-lg-5 col-md-7 d-xs-none">
-
+                    <form method="GET" action="{{ route('shop') }}">
                     <div class="main-menu-search">
 
                         <div class="navbar-search search-style-5">
+
                             <div class="search-select">
                                 <div class="select-position">
                                     <select id="select1">
@@ -69,15 +70,15 @@
                                 </div>
                             </div>
                             <div class="search-input">
-                                <input type="text" placeholder="Search">
+                                <input type="text" id="search-input" name="search" placeholder="Search Here..." value="{{ request('search') }}">
                             </div>
                             <div class="search-btn">
-                                <button><i class="lni lni-search-alt"></i></button>
+                                <button type="submit"><i class="lni lni-search-alt"></i></button>
                             </div>
+
                         </div>
-
                     </div>
-
+                    </form>
                 </div>
                 <div class="col-lg-4 col-md-2 col-5">
                     <div class="middle-right-area">
@@ -106,33 +107,26 @@
                                         <a href="{{ url('/cart') }}">View Cart</a>
                                     </div>
                                     <ul class="shopping-list">
-                                        <li>
-                                            <a href="javascript:void(0)" class="remove"
-                                                title="Remove this item"><i class="lni lni-close"></i></a>
-                                            <div class="cart-img-head">
-                                                <a class="cart-img" href="product-details.html"><img
-                                                        src="{{ asset('website-assets') }}/assets/images/header/cart-items/item1.jpg"
-                                                        alt="#"></a>
-                                            </div>
-                                            <div class="content">
-                                                <h4><a href="product-details.html">
-                                                        Apple Watch Series 6</a></h4>
-                                                <p class="quantity">1x - <span class="amount">$99.00</span></p>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" class="remove"
-                                                title="Remove this item"><i class="lni lni-close"></i></a>
-                                            <div class="cart-img-head">
-                                                <a class="cart-img" href="product-details.html"><img
-                                                        src="{{ asset('website-assets') }}/assets/images/header/cart-items/item2.jpg"
-                                                        alt="#"></a>
-                                            </div>
-                                            <div class="content">
-                                                <h4><a href="product-details.html">Wi-Fi Smart Camera</a></h4>
-                                                <p class="quantity">1x - <span class="amount">$35.00</span></p>
-                                            </div>
-                                        </li>
+                                        @if (empty($cart))
+                                            <li>Your cart is empty.</li>
+                                        @else
+                                            @foreach ($cart as $item)
+                                                <li>
+                                                    <a href="javascript:void(0)" class="remove" title="Remove this item" data-product-id="{{ $item['product_id'] }}">
+                                                        <i class="lni lni-close"></i>
+                                                    </a>
+                                                    <div class="cart-img-head">
+                                                        <a class="cart-img" href="product-details.html">
+                                                            <img src="{{ $item['thumbnail_image'] }}" alt="{{ $item['name'] }}" style="width: 50px; height: auto;">
+                                                        </a>
+                                                    </div>
+                                                    <div class="content">
+                                                        <h4><a href="product-details.html">{{ $item['name'] }}</a></h4>
+                                                        <p class="quantity">{{ $item['quantity'] }}x - <span class="amount">${{ number_format($item['price'], 2) }}</span></p>
+                                                    </div>
+                                                </li>
+                                            @endforeach
+                                        @endif
                                     </ul>
                                     <div class="bottom">
                                         <div class="total">
@@ -152,7 +146,7 @@
             </div>
         </div>
     </div>
-
+    <div id="suggestions" style="display:none; width: 900px;  top: 135px; margin-left: 200px; padding: 5px 5px 5px 5px; border: 1px solid #ccc; background: #fff; position: absolute; z-index: 1000;"></div>
 
     <div class="container">
         <div class="row align-items-center">
@@ -162,31 +156,28 @@
                     <div class="mega-category-menu">
                         <span class="cat-button"><i class="lni lni-menu"></i>All Categories</span>
                         <ul class="sub-category">
-                            <li><a href="product-grids.html">Electronics <i class="lni lni-chevron-right"></i></a>
-                                <ul class="inner-sub-category">
-                                    <li><a href="product-grids.html">Digital Cameras</a></li>
-                                    <li><a href="product-grids.html">Camcorders</a></li>
-                                    <li><a href="product-grids.html">Camera Drones</a></li>
-                                    <li><a href="product-grids.html">Smart Watches</a></li>
-                                    <li><a href="product-grids.html">Headphones</a></li>
-                                    <li><a href="product-grids.html">MP3 Players</a></li>
-                                    <li><a href="product-grids.html">Microphones</a></li>
-                                    <li><a href="product-grids.html">Chargers</a></li>
-                                    <li><a href="product-grids.html">Batteries</a></li>
-                                    <li><a href="product-grids.html">Cables & Adapters</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="product-grids.html">accessories</a></li>
-                            <li><a href="product-grids.html">Televisions</a></li>
-                            <li><a href="product-grids.html">best selling</a></li>
-                            <li><a href="product-grids.html">top 100 offer</a></li>
-                            <li><a href="product-grids.html">sunglass</a></li>
-                            <li><a href="product-grids.html">watch</a></li>
-                            <li><a href="product-grids.html">man’s product</a></li>
-                            <li><a href="product-grids.html">Home Audio & Theater</a></li>
-                            <li><a href="product-grids.html">Computers & Tablets </a></li>
-                            <li><a href="product-grids.html">Video Games </a></li>
-                            <li><a href="product-grids.html">Home Appliances </a></li>
+                            @foreach($mainCategories as $mainCategory)
+                                <li>
+                                    <a href="{{ route('shop', ['catId' => $mainCategory->id, 'page' => request('page')]) }}">
+                                        <img src="{{ asset('storage/' . $mainCategory->icon) }}" class="me-2" alt="icon" style="max-width: 20px; height: 20px;">
+                                        {{ $mainCategory->main_category_name }}
+                                        @if ($mainCategory->subCategories->isNotEmpty())
+                                            <i class="lni lni-chevron-right"></i>
+                                        @endif
+                                    </a>
+                                    @if ($mainCategory->subCategories->isNotEmpty())
+                                        <ul class="inner-sub-category">
+                                            @foreach($mainCategory->subCategories as $subCategory)
+                                                <li>
+                                                    <a href="{{ route('shop', ['catSubId' => $subCategory->id, 'page' => request('page')]) }}">
+                                                        {{ $subCategory->Sub_category_name }}
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
 
@@ -245,6 +236,7 @@
 
 </header>
 @section('script')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const navLinks = document.querySelectorAll('.nav-item a');
@@ -259,5 +251,53 @@
         });
     });
 </script>
+
+    <script>
+        $(document).ready(function() {
+            $('#search-input').on('keyup', function() {
+                const searchTerm = $(this).val();
+
+                if (searchTerm.length > 0) {
+                    $.ajax({
+                        url: '{{ route("search.suggestions") }}',
+                        type: 'GET',
+                        data: { term: searchTerm },
+                        success: function(data) {
+                            console.log(data); // Log the response data
+                            $('#suggestions').empty().show();
+                            if (data.length > 0) {
+                                $.each(data, function(index, product) {
+                                    $('#suggestions').append('<div class="suggestion-item" style="cursor: pointer; margin-bottom: 5px; color: #0a080e; font-size: medium; font-weight: normal; " data-id="'+ product.id +'">' + product.product_title + '</div>'); // Ensure you are using product_title here
+                                });
+                            } else {
+                                $('#suggestions').append('<div class="no-suggestions">No products found</div>');
+                            }
+                        }
+
+                    });
+                } else {
+                    $('#suggestions').hide();
+                }
+            });
+
+            // Event delegation to handle clicks on suggestion items
+            $(document).on('click', '.suggestion-item', function() {
+                const productId = $(this).data('id');
+                // Optionally, redirect to the product page or fill the input
+                $('#search-input').val($(this).text());
+                $('#suggestions').hide(); // Hide suggestions after selection
+                // Optionally, submit the form if needed
+                // $(this).closest('form').submit();
+            });
+
+            $(document).on('click', function() {
+                $('#suggestions').hide(); // Hide suggestions on click outside
+            });
+        });
+    </script>
+
+
+
 @endsection
+
 

@@ -126,6 +126,14 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Dynamic Attributes -->
+                            <div class="container my-2">
+                                <div class="form-group" id="dynamicAttributes">
+                                    <label class="form-label">Product Attributes: <sup><span class="text-danger fw-700 fs-6 ">*</span></sup></label>
+                                    <button type="button" class="btn btn-primary" id="addAttributeButton">Add Attribute</button>
+                                </div>
+                            </div>
+
                             <!-- Short Editor -->
                             <div class="form-group">
                                 <label class="form-label">Short Description: <sup><span
@@ -175,7 +183,7 @@
                                          style="display: none; margin-top: 10px; max-width: 1000px; height: 100px;" />
                                 </div>
                                 <input hidden type="file" name="thumbnail_image" class="form-control inputbgtextcolor"
-                                       id="thumbnailImage" accept="image/png, image/jpeg, image/jpg, image/gif"
+                                       id="thumbnailImage" accept="image/png, image/jpeg, image/jpg, image/gif, image/webp"
                                        onchange="onFileChangeIcon(event)">
                             </div>
                             <!-- Product Images -->
@@ -217,7 +225,7 @@
                                          </span>
                                                 <input type="file" name="product_images[]" class="d-none form-control inputbgtextcolor"
                                                        id="productImages" onchange="product_imges_selected()"
-                                                       accept="image/png, image/jpeg, image/jpg, image/gif" multiple="" >
+                                                       accept="image/png, image/jpeg, image/jpg, image/gif, image/webp" multiple="" >
                                             </div>
 
                                         </div>
@@ -418,6 +426,36 @@
                 allowClear: true // Allows clearing the selected options
             });
         });
+    </script>
+
+{{--    new Attribute--}}
+    <script>
+        let attributeIndex = 0;
+
+        // Function to add an attribute
+        function addAttribute() {
+            const div = document.createElement('div');
+            div.className = "attribute-group mt-2";
+
+            div.innerHTML = `
+            <input type="text" class="border border-primary p-2" style="border-radius: 5px;" name="attributes[${attributeIndex}][key]" placeholder="Attribute Name" required>
+            <input type="text" class="border border-primary p-2" style="border-radius: 5px;" name="attributes[${attributeIndex}][value]" placeholder="Attribute Value" required>
+            <button type="button" class="btn btn-danger btn-sm remove-button">Remove</button>
+        `;
+
+            document.getElementById('dynamicAttributes').appendChild(div);
+            attributeIndex++;
+        }
+
+        // Function to handle clicks on the container
+        function handleContainerClick(event) {
+            if (event.target.classList.contains('remove-button')) {
+                const div = event.target.parentNode;
+                div.remove();
+            }
+        }
+        document.getElementById('addAttributeButton').addEventListener('click', addAttribute);
+        document.getElementById('dynamicAttributes').addEventListener('click', handleContainerClick);
     </script>
 
 @endsection

@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="{{ asset('website-assets') }}/assets/css/glightbox.min.css" />
     <link rel="stylesheet" href="{{ asset('website-assets') }}/assets/css/main.css" />
     @yield('css')
-  
+
 </head>
 
 <body>

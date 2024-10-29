@@ -132,6 +132,22 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Dynamic Attributes -->
+                            <div class="container my-2">
+                                <div class="form-group" id="dynamicAttributes">
+                                    <label class="form-label">Product Attributes: <sup><span class="text-danger fw-700 fs-6 ">*</span></sup></label>
+                                    <button type="button" class="btn btn-primary" id="addAttributeButton">Add Attribute</button>
+                                    @foreach($product->attributes as $attribute)
+                                        <div class="attribute-group mt-2" data-attribute-id="{{ $attribute->id }}">
+                                            <input type="hidden" name="attributes[{{ $loop->index }}][id]" value="{{ $attribute->id }}">
+                                            <input type="text" class="border border-primary p-2" style="border-radius: 5px;" name="attributes[{{ $loop->index }}][key]" placeholder="Attribute Name" value="{{ old('attributes.'.$loop->index.'.key', $attribute->key) }}" required>
+                                            <input type="text" class="border border-primary p-2" style="border-radius: 5px;" name="attributes[{{ $loop->index }}][value]" placeholder="Attribute Value" value="{{ old('attributes.'.$loop->index.'.value', $attribute->value) }}" required>
+                                            <button type="button" class="btn btn-danger btn-sm remove-button" data-id="{{ $attribute->id }}">Remove</button>
+                                        </div>
+                                    @endforeach
+
+                                </div>
+                            </div>
                             <!-- Short Editor -->
                             <div class="form-group">
                                 <label class="form-label">Short Description: <sup><span
@@ -264,7 +280,6 @@
 @section('script')
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <!-- Initialize TinyMCE editor -->
     <script src="https://cdn.tiny.cloud/1/mao5ue5nvhseruiz5rsib0eu3pud0stwxe8kdpfa76enhe4x/tinymce/7/tinymce.min.js"
             referrerpolicy="origin"></script>
@@ -468,6 +483,64 @@
 
                 });
             });
+        });
+    </script>
+
+    {{--    new Attribute--}}
+    <script>
+        let attributeIndex = 0;
+
+        // Function to add an attribute
+        function addAttribute() {
+            const div = document.createElement('div');
+            div.className = "attribute-group mt-2";
+
+            div.innerHTML = `
+            <input type="text" class="border border-primary p-2" style="border-radius: 5px;" name="attributes[${attributeIndex}][key]" placeholder="Attribute Name" required>
+            <input type="text" class="border border-primary p-2" style="border-radius: 5px;" name="attributes[${attributeIndex}][value]" placeholder="Attribute Value" required>
+            <button type="button" class="btn btn-danger btn-sm remove-button">Remove</button>
+        `;
+
+            document.getElementById('dynamicAttributes').appendChild(div);
+            attributeIndex++;
+        }
+
+        // Function to handle clicks on the container
+        function handleContainerClick(event) {
+            if (event.target.classList.contains('remove-button')) {
+                const div = event.target.parentNode;
+                div.remove();
+            }
+        }
+        document.getElementById('addAttributeButton').addEventListener('click', addAttribute);
+        document.getElementById('dynamicAttributes').addEventListener('click', handleContainerClick);
+
+    </script>
+
+    {{--    Delete Attribute--}}
+    <script>
+        $(document).on('click', '.remove-button', function() {
+            const button = $(this);
+            const attributeId = button.data('id'); // Get the attribute ID
+
+            // Confirm the deletion
+            if (confirm('Are you sure you want to remove this attribute?')) {
+                $.ajax({
+                    url: 'http://localhost/E-commerce-laravel11-tailwindcss/admin/attributes/' + attributeId, // Adjust the URL based on your routing
+                    type: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}' // CSRF token for protection
+                    },
+                    success: function(response) {
+                        // Remove the attribute from the UI
+                        button.closest('.attribute-group').remove();
+                        alert(response.message); // Show success message
+                    },
+                    error: function(xhr) {
+                        alert('Error: ' + xhr.responseText); // Handle errors
+                    }
+                });
+            }
         });
     </script>
 

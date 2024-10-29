@@ -6,10 +6,7 @@
     @include('website.components.hero')
 
 
-
     @include('website.components.featured-categories')
-
-
 
     <section class="trending-product section">
         <div class="container">
@@ -320,30 +317,11 @@
             </div>
             <div class="brands-logo-wrapper">
                 <div class="brands-logo-carousel d-flex align-items-center justify-content-between">
-                    <div class="brand-logo">
-                        <img src="{{ asset('website-assets') }}/assets/images/brands/01.png" alt="#">
-                    </div>
-                    <div class="brand-logo">
-                        <img src="{{ asset('website-assets') }}/assets/images/brands/02.png" alt="#">
-                    </div>
-                    <div class="brand-logo">
-                        <img src="{{ asset('website-assets') }}/assets/images/brands/03.png" alt="#">
-                    </div>
-                    <div class="brand-logo">
-                        <img src="{{ asset('website-assets') }}/assets/images/brands/04.png" alt="#">
-                    </div>
-                    <div class="brand-logo">
-                        <img src="{{ asset('website-assets') }}/assets/images/brands/05.png" alt="#">
-                    </div>
-                    <div class="brand-logo">
-                        <img src="{{ asset('website-assets') }}/assets/images/brands/06.png" alt="#">
-                    </div>
-                    <div class="brand-logo">
-                        <img src="{{ asset('website-assets') }}/assets/images/brands/03.png" alt="#">
-                    </div>
-                    <div class="brand-logo">
-                        <img src="{{ asset('website-assets') }}/assets/images/brands/04.png" alt="#">
-                    </div>
+                    @foreach($brands as $brand)
+                        <div class="brand-logo">
+                            <img src="{{ asset('storage/' . $brand->image) }}" alt="#">
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>

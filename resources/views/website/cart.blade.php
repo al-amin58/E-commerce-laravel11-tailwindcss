@@ -22,6 +22,7 @@
         </div>
     </div>
 
+    @include('errors.message')
 
     <div class="shopping-cart section">
         <div class="container">
@@ -38,10 +39,10 @@
                             <p>Quantity</p>
                         </div>
                         <div class="col-lg-2 col-md-2 col-12">
-                            <p>Subtotal</p>
+                            <p>Price</p>
                         </div>
                         <div class="col-lg-2 col-md-2 col-12">
-                            <p>Discount</p>
+                            <p>Total Price</p>
                         </div>
                         <div class="col-lg-1 col-md-2 col-12">
                             <p>Remove</p>
@@ -49,115 +50,55 @@
                     </div>
                 </div>
 
+                @if(session('success'))
+                    <div>{{ session('success') }}</div>
+                @endif
 
-                <div class="cart-single-list">
-                    <div class="row align-items-center">
-                        <div class="col-lg-1 col-md-1 col-12">
-                            <a href="product-details.html"><img src="{{ asset('website-assets') }}/assets/images/cart/01.jpg" alt="#"></a>
-                        </div>
-                        <div class="col-lg-4 col-md-3 col-12">
-                            <h5 class="product-name"><a href="product-details.html">
-                                    Canon EOS M50 Mirrorless Camera</a></h5>
-                            <p class="product-des">
-                                <span><em>Type:</em> Mirrorless</span>
-                                <span><em>Color:</em> Black</span>
-                            </p>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-12">
-                            <div class="count-input">
-                                <select class="form-control">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                </select>
+                @if($items->isNotEmpty())
+
+                        @foreach($items as $item)
+
+                        <div class="cart-single-list">
+                            <div class="row align-items-center">
+                                <div class="col-lg-1 col-md-1 col-12">
+                                    <img src="{{ asset('images/products/'. $item->product->thumbnail_image)  }}" alt="{{ $item->product->product_title }}" style="width: 50px;">
+                                </div>
+                                <div class="col-lg-4 col-md-3 col-12">
+                                    <h5 class="product-name"><strong>{{ $item->product->product_title}}</strong></h5>
+                                    <p class="product-des">
+                                        <span><em></em> {{$item->prodcut->size ?? ''}}</span>
+                                        <span><em></em> {{$item->prodcut->colors ?? ''}}</span>
+                                    </p>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-12">
+                                    <div class="count-input">
+                                        <select class="form-control" id="quantity-select-{{ $item->id }}" onchange="updatePrice({{ $item->id }}, {{ $item->product->discount_price ?? $item->product->price }})">
+                                            @for($i = 1; $i <= 5; $i++)
+                                            <option value="{{$i}}" {{ $item->quantity == $i ? 'selected' : '' }}>{{$i}}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-12">
+                                    <p>$ {{ number_format( $item->product->discount_price ?? $item->product->price, 2)}}</p>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-12" id="price-{{ $item->id }}">
+                                    <p>{{ number_format($item->total_price, 2) }}</p>
+                                </div>
+                                <div class="col-lg-1 col-md-2 col-12">
+                                    <form action="{{ route('cart.remove', $item->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" style="border-radius: 50%; height: 25px; width: 25px; border: none;" ><i class="lni lni-close" style="color:red; font-weight: bolder"></i></button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-2 col-12">
-                            <p>$910.00</p>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-12">
-                            <p>$29.00</p>
-                        </div>
-                        <div class="col-lg-1 col-md-2 col-12">
-                            <a class="remove-item" href="javascript:void(0)"><i class="lni lni-close"></i></a>
-                        </div>
-                    </div>
-                </div>
 
-
-                <div class="cart-single-list">
-                    <div class="row align-items-center">
-                        <div class="col-lg-1 col-md-1 col-12">
-                            <a href="product-details.html"><img src="{{ asset('website-assets') }}/assets/images/cart/02.jpg" alt="#"></a>
-                        </div>
-                        <div class="col-lg-4 col-md-3 col-12">
-                            <h5 class="product-name"><a href="product-details.html">
-                                    Apple iPhone X 256 GB Space Gray</a></h5>
-                            <p class="product-des">
-                                <span><em>Memory:</em> 256 GB</span>
-                                <span><em>Color:</em> Space Gray</span>
-                            </p>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-12">
-                            <div class="count-input">
-                                <select class="form-control">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-12">
-                            <p>$1100.00</p>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-12">
-                            <p>—</p>
-                        </div>
-                        <div class="col-lg-1 col-md-2 col-12">
-                            <a class="remove-item" href="javascript:void(0)"><i class="lni lni-close"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="cart-single-list">
-                    <div class="row align-items-center">
-                        <div class="col-lg-1 col-md-1 col-12">
-                            <a href="product-details.html"><img src="{{ asset('website-assets') }}/assets/images/cart/03.jpg" alt="#"></a>
-                        </div>
-                        <div class="col-lg-4 col-md-3 col-12">
-                            <h5 class="product-name"><a href="product-details.html">HP LaserJet Pro Laser Printer</a></h5>
-                            <p class="product-des">
-                                <span><em>Type:</em> Laser</span>
-                                <span><em>Color:</em> White</span>
-                            </p>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-12">
-                            <div class="count-input">
-                                <select class="form-control">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-12">
-                            <p>$550.00</p>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-12">
-                            <p>—</p>
-                        </div>
-                        <div class="col-lg-1 col-md-2 col-12">
-                            <a class="remove-item" href="javascript:void(0)"><i class="lni lni-close"></i></a>
-                        </div>
-                    </div>
-                </div>
+                        @endforeach
+                @else
+                    <p>Your cart is empty.</p>
+                @endif
 
             </div>
             <div class="row">
@@ -167,23 +108,14 @@
                         <div class="row">
                             <div class="col-lg-8 col-md-6 col-12">
                                 <div class="left">
-                                    <div class="coupon">
-                                        <form action="#" target="_blank">
-                                            <input name="Coupon" placeholder="Enter Your Coupon">
-                                            <div class="button">
-                                                <button class="btn">Apply Coupon</button>
-                                            </div>
-                                        </form>
-                                    </div>
+{{--                                    for add or other if show--}}
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6 col-12">
                                 <div class="right">
                                     <ul>
-                                        <li>Cart Subtotal<span>$2560.00</span></li>
-                                        <li>Shipping<span>Free</span></li>
-                                        <li>You Save<span>$29.00</span></li>
-                                        <li class="last">You Pay<span>$2531.00</span></li>
+                                        <li>Cart Total Price<span id="cart-total-price">$ {{ number_format($totalPrice, 2) }}</span></li>
+                                        <li class="last">Cart Item<span>{{ $totalItems }}</span></li>
                                     </ul>
                                     <div class="button">
                                         <a href="{{ url('/checkout') }}" class="btn">Checkout</a>
@@ -199,3 +131,48 @@
         </div>
     </div>
 @endsection
+<script>
+    function updatePrice(itemId, unitPrice) {
+        const quantity = document.getElementById(`quantity-select-${itemId}`).value;
+        const totalPrice = (quantity * unitPrice).toFixed(2);
+        document.getElementById(`price-${itemId}`).innerHTML = `<p>${totalPrice}</p>`;
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function updatePrice(itemId, unitPrice) {
+        const quantity = document.getElementById(`quantity-select-${itemId}`).value;
+        const itemTotalPrice = (quantity * unitPrice).toFixed(2);
+        document.getElementById(`price-${itemId}`).innerHTML = `<p>$ ${itemTotalPrice}</p>`;
+
+        // Send AJAX request to update the quantity in the database
+        $.ajax({
+            url: `http://localhost/E-commerce-laravel11-tailwindcss/cart/items/${itemId}/update`,
+            type: 'POST',
+            data: {
+                quantity: quantity,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                console.log('Quantity updated successfully', response);
+                updateCartTotal(); // Call to update the cart total
+            },
+            error: function(xhr) {
+                console.error('Error updating quantity', xhr);
+            }
+        });
+    }
+
+    function updateCartTotal() {
+        let total = 0;
+        $('div[id^="price-"]').each(function() {
+            const priceText = $(this).text().replace('$ ', '');
+            total += parseFloat(priceText);
+        });
+        $('#cart-total-price').text('$ ' + total.toFixed(2));
+    }
+</script>
+
+
+

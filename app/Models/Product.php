@@ -15,8 +15,8 @@ class Product extends Model
         'discount_percentage',
         'quantity',
         'sku',
-        'main_category',
-        'sub_category',
+        'main_category_id',
+        'sub_category_id',
         'brand_id',
         'short_description',
         'full_description',
@@ -25,11 +25,11 @@ class Product extends Model
     ];
     public function mainCategory()
     {
-        return $this->belongsTo(MainCategory::class, 'main_category');
+        return $this->belongsTo(MainCategory::class, 'main_category_id');
     }
     public function subcategory() // Changed to singular
     {
-        return $this->belongsTo(SubCategory::class, 'sub_category');
+        return $this->belongsTo(SubCategory::class, 'sub_category_id');
     }
 
     public function brand()
@@ -48,6 +48,10 @@ class Product extends Model
     public function images()
     {
         return $this->hasMany(ProductImages::class);
+    }
+    public function product_attributes()
+    {
+        return $this->hasMany(ProductAttribute::class, 'product_id');
     }
 
 }
